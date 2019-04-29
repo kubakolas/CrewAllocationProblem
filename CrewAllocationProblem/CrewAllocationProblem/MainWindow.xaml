@@ -5,8 +5,49 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CrewAllocationProblem"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="350" Width="350">
     <Grid>
+        <TabControl>
+            <TabItem Header="Crew">
+                <StackPanel>
+                    
+                <DataGrid
+                HorizontalAlignment="Left"
+                Margin="10,10,0,0"
+                VerticalAlignment="Top"
+                AlternatingRowBackground="LightGray"
+                Loaded="DataGrid_Loaded"/>
+                    <Button x:Name="AddCrew" Content="Add Crew" Height="20" Width="75"/>
+                </StackPanel>
+
+            </TabItem>
+            
+            <TabItem Header="Required Crew">
+                <StackPanel>
+                    <DataGrid
+            HorizontalAlignment="Left"
+            Margin="10,10,0,0"
+            VerticalAlignment="Top"
+            AlternatingRowBackground="LightGray"
+            Loaded="DataGrid_Loaded2"/>
+                    <Button x:Name="AddRequiredCrew" Content="Add Required" Height="20" Width="100"/>
+                </StackPanel>
+            </TabItem>
+                
+
+            <TabItem Header="Flights">
+                <StackPanel>
+                    <DataGrid
+            HorizontalAlignment="Left"
+            Margin="10,10,0,0"
+            VerticalAlignment="Top"
+            AlternatingRowBackground="LightGray"
+            Loaded="DataGrid_Loaded3"/>
+                    <Button x:Name="GenerateFlights" Content="Generate Flights" Height="20" Width="100"/>
+                </StackPanel>
+            </TabItem>
+            
+        </TabControl>
         
     </Grid>
 </Window>

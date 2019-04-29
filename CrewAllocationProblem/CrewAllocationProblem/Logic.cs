@@ -9,7 +9,7 @@ namespace CrewAllocationProblem
     class Logic
     {
 
-        private static void Solve()
+        public static void Solve()
         {
             // WEJSCIA 
 
