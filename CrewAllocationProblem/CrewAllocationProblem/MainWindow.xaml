@@ -12,12 +12,17 @@
                 <StackPanel>
                     
                 <DataGrid
+                Name="DG1"
                 HorizontalAlignment="Left"
                 Margin="10,10,0,0"
                 VerticalAlignment="Top"
                 AlternatingRowBackground="LightGray"
                 Loaded="DataGrid_Loaded"/>
-                    <Button x:Name="AddCrew" Content="Add Crew" Height="20" Width="75"/>
+                    <Button x:Name="AddCrew" Content="Add Crew" Height="20" Width="75" Click="AddCrew_Click"/>
+                    <StackPanel HorizontalAlignment="Center">
+                        <Button x:Name="button" Content="Delete" Height="20" Width="75" Click="DelCrew_Click"/>
+                        <TextBox x:Name="textBox" Height="20" Width="75" TextWrapping="Wrap"/>
+                    </StackPanel>
                 </StackPanel>
 
             </TabItem>
@@ -25,12 +30,17 @@
             <TabItem Header="Required Crew">
                 <StackPanel>
                     <DataGrid
-            HorizontalAlignment="Left"
-            Margin="10,10,0,0"
-            VerticalAlignment="Top"
-            AlternatingRowBackground="LightGray"
-            Loaded="DataGrid_Loaded2"/>
-                    <Button x:Name="AddRequiredCrew" Content="Add Required" Height="20" Width="100"/>
+                    Name="DG2"
+                    HorizontalAlignment="Left"
+                    Margin="10,10,0,0"
+                    VerticalAlignment="Top"
+                    AlternatingRowBackground="LightGray"
+                    Loaded="DataGrid_Loaded2"/>
+                    <Button x:Name="AddRequiredCrew" Content="Add Required" Height="20" Width="100" Click="AddRequiredCrew_Click"/>
+                    <StackPanel HorizontalAlignment="Center">
+                        <Button x:Name="button2" Content="Delete" Height="20" Width="75" Click="DelRequiredCrew_Click"/>
+                        <TextBox x:Name="textBox2" Height="20" Width="75" TextWrapping="Wrap"/>
+                    </StackPanel>
                 </StackPanel>
             </TabItem>
                 
@@ -38,12 +48,12 @@
             <TabItem Header="Flights">
                 <StackPanel>
                     <DataGrid
+            Name="DG3"
             HorizontalAlignment="Left"
             Margin="10,10,0,0"
             VerticalAlignment="Top"
             AlternatingRowBackground="LightGray"
             Loaded="DataGrid_Loaded3"/>
-                    <Button x:Name="GenerateFlights" Content="Generate Flights" Height="20" Width="100"/>
                 </StackPanel>
             </TabItem>
             

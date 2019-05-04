@@ -3,17 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using Decider.Csp.BaseTypes;
 using Decider.Csp.Integer;
+using CrewAllocationProblem;
 
 namespace CrewAllocationProblem
 {
     class Logic
     {
+        public List<string> names;
+        public int num_persons;
+        public List<int[]> attributes;
+        public List<int[]> required_crew;
+        public string[,] flight_crew;
+        public int num_flights;
 
-        public static void Solve()
+        public void loadStartingData()
         {
-            // WEJSCIA 
-
-            string[] names = {"Tom",
+            names = new List<string>
+                      { "Tom",
                       "David",
                       "Jeremy",
                       "Ron",
@@ -34,32 +40,34 @@ namespace CrewAllocationProblem
                       "Heather",
                       "Juliet"};
 
-            int num_persons = 20;
-            int[,] attributes = {
-            // steward, hostess, french, spanish, german
-              {1,0,0,0,1},   // Tom     = 0
-              {1,0,0,0,0},   // David   = 1
-              {1,0,0,0,1},   // Jeremy  = 2
-              {1,0,0,0,0},   // Ron     = 3
-              {1,0,0,1,0},   // Joe     = 4
-              {1,0,1,1,0},   // Bill    = 5
-              {1,0,0,1,0},   // Fred    = 6
-              {1,0,0,0,0},   // Bob     = 7
-              {1,0,0,1,1},   // Mario   = 8
-              {1,0,0,0,0},   // Ed      = 9
-              {0,1,0,0,0},   // Carol   = 10
-              {0,1,0,0,0},   // Janet   = 11
-              {0,1,0,0,0},   // Tracy   = 12
-              {0,1,0,1,0},   // Marilyn = 13
-              {0,1,0,0,0},   // Carolyn = 14
-              {0,1,0,0,1},   // Cathy   = 15
-              {0,1,1,1,0},   // Inez    = 16
-              {0,1,1,0,0},   // Jean    = 17
-              {0,1,0,1,0},   // Heather = 18
-              {0,1,1,0,1}    // Juliet  = 19
-        };
+            num_persons = 20;
 
-            //
+            attributes = new List<int[]>()
+            {
+                // steward, hostess, french, spanish, german
+              new int[]{1,0,0,0,1},  // Tom     = 0
+              new int[]{1,0,0,0,0},   // David   = 1
+              new int[]{1,0,0,0,1},   // Jeremy  = 2
+              new int[]{1,0,0,0,0},   // Ron     = 3
+              new int[]{1,0,0,1,0},   // Joe     = 4
+              new int[]{1,0,1,1,0},   // Bill    = 5
+              new int[]{1,0,0,1,0},   // Fred    = 6
+              new int[]{1,0,0,0,0},   // Bob     = 7
+              new int[]{1,0,0,1,1},   // Mario   = 8
+              new int[]{1,0,0,0,0},   // Ed      = 9
+              new int[]{0,1,0,0,0},   // Carol   = 10
+              new int[]{0,1,0,0,0},   // Janet   = 11
+              new int[]{0,1,0,0,0},   // Tracy   = 12
+              new int[]{0,1,0,1,0},   // Marilyn = 13
+              new int[]{0,1,0,0,0},   // Carolyn = 14
+              new int[]{0,1,0,0,1},   // Cathy   = 15
+              new int[]{0,1,1,1,0},   // Inez    = 16
+              new int[]{0,1,1,0,0},   // Jean    = 17
+              new int[]{0,1,0,1,0},   // Heather = 18
+              new int[]{0,1,1,0,1}    // Juliet  = 19
+            };
+
+            var a = attributes[1][2];
             // Required number of crew members.
             //
             // The columns are in the following order:
@@ -70,25 +78,27 @@ namespace CrewAllocationProblem
             // spanish   : How many Spanish speaking employees are required
             // german    : How many German speaking employees are required
             //
-
-            int[,] required_crew = {
-                {4,1,1,1,1,1}, // Flight 1
-                {5,1,1,1,1,1}, // Flight 2
-                {5,1,1,1,1,1}, // ..
-                {6,2,2,1,1,1},
-                {7,3,3,1,1,1},
-                {4,1,1,1,1,1},
-                {5,1,1,1,1,1},
-                {6,1,1,1,1,1},
-                {6,2,2,1,1,1}, // ...
-                {7,3,3,1,1,1}  // Flight 10
+            required_crew = new List<int[]>() {
+                new int[]{4,1,1,1,1,1}, // Flight 1
+                new int[]{5,1,1,1,1,1}, // Flight 2
+                new int[]{5,1,1,1,1,1}, // ..
+                new int[]{6,2,2,1,1,1},
+                new int[]{7,3,3,1,1,1},
+                new int[]{4,1,1,1,1,1},
+                new int[]{5,1,1,1,1,1},
+                new int[]{6,1,1,1,1,1},
+                new int[]{6,2,2,1,1,1}, // ...
+                new int[]{7,3,3,1,1,1}  // Flight 10
             };
 
+            num_flights = required_crew.Count;
 
+            flight_crew = new string[num_flights, 7];
+        }
 
-            // KONIEC WEJSC
-
-            int num_flights = required_crew.GetLength(0);
+        public void Solve()
+        {
+            flight_crew = new string[num_flights, 7];
 
             VariableInteger[,] s = new VariableInteger[num_flights, num_persons];
             for (int i = 0; i < num_flights; i++)
@@ -145,7 +155,7 @@ namespace CrewAllocationProblem
                 {
                     sum += v;
                 }
-                var sizesEqual = (sum == required_crew[f, 0]);
+                var sizesEqual = (sum == required_crew[f][0]);
                 csArray.Add(new ConstraintInteger(sizesEqual));
 
                 // attributes and requirements
@@ -154,14 +164,14 @@ namespace CrewAllocationProblem
                     ExpressionInteger[] tmp2 = new ExpressionInteger[num_persons];
                     for (int p = 0; p < num_persons; p++)
                     {
-                        tmp2[p] = (s[f, p] * attributes[p, a]);
+                        tmp2[p] = (s[f, p] * attributes[p][a]);
                     }
                     var sum2 = new ExpressionInteger(0);
                     foreach (var v in tmp2)
                     {
                         sum2 += v;
                     }
-                    var attEqual = sum2 >= required_crew[f, a + 1];
+                    var attEqual = sum2 >= required_crew[f][a + 1];
                     csArray.Add(new ConstraintInteger(attEqual));
                 }
             }
@@ -180,15 +190,17 @@ namespace CrewAllocationProblem
 
             IState<int> state = new StateInteger(variables, csArray);
             state.StartSearch(out StateOperationResult searchResult);
-
             for (int i = 0; i < num_flights; i++)
             {
+                int count = 0;
                 Console.Write("Flight " + i.ToString() + " :   ");
                 for (int j = 0; j < num_persons; j++)
                 {
+                    
                     if (s[i, j].Value == 1)
                     {
-                        Console.Write(names[j] + " ");
+                        flight_crew[i, count] = names[j];
+                        count++;
                     }
                 }
                 Console.WriteLine();
