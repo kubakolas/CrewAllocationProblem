@@ -20,6 +20,7 @@
                 Loaded="DataGrid_Loaded"/>
                     <Button x:Name="AddCrew" Content="Add Crew" Height="20" Width="75" Click="AddCrew_Click"/>
                     <StackPanel HorizontalAlignment="Center">
+                        <Button x:Name="Update" Content="Update" Height="20" Width="75" Click="UpdateCrew_Click"/>
                         <Button x:Name="button" Content="Delete" Height="20" Width="75" Click="DelCrew_Click"/>
                         <TextBox x:Name="textBox" Height="20" Width="75" TextWrapping="Wrap"/>
                     </StackPanel>
@@ -38,6 +39,7 @@
                     Loaded="DataGrid_Loaded2"/>
                     <Button x:Name="AddRequiredCrew" Content="Add Required" Height="20" Width="100" Click="AddRequiredCrew_Click"/>
                     <StackPanel HorizontalAlignment="Center">
+                        <Button x:Name="Update2" Content="Update" Height="20" Width="75" Click="UpdateRequiredCrew_Click"/>
                         <Button x:Name="button2" Content="Delete" Height="20" Width="75" Click="DelRequiredCrew_Click"/>
                         <TextBox x:Name="textBox2" Height="20" Width="75" TextWrapping="Wrap"/>
                     </StackPanel>

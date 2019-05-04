@@ -243,5 +243,51 @@ namespace CrewAllocationProblem
             this.DataGrid_Loaded2(DG2, new RoutedEventArgs());
         }
 
+        private void UpdateCrew_Click(object sender, RoutedEventArgs e)
+        {
+            List<string> newNames = new List<string>();
+            List<int[]> newAttributes = new List<int[]>();
+            var listNewItem = this.DG1.Items;
+            foreach(var c in listNewItem)
+            {
+                
+                var crew = c as Crew;
+                if (crew != null)
+                {
+                    newNames.Add(crew.Name);
+                    newAttributes.Add(new int[] {crew.Steward == "Yes" ? 1 : 0,
+                                            crew.Hostess == "Yes" ? 1 : 0,
+                                            crew.French == "Yes" ? 1 : 0,
+                                            crew.Spanish == "Yes" ? 1 : 0,
+                                            crew.German == "Yes" ? 1 : 0});
+                }
+            }
+
+            logic.names = newNames;
+            logic.attributes = newAttributes;
+
+        }
+
+        private void UpdateRequiredCrew_Click(object sender, RoutedEventArgs e)
+        {
+            List<int[]> newRequiredCrew = new List<int[]>();
+            var listNewItem = this.DG2.Items;
+            foreach (var c in listNewItem)
+            {
+                var requiredCrew = c as RequiredCrew;
+                if (requiredCrew != null)
+                {
+                    newRequiredCrew.Add(new int[] {requiredCrew.Staff,
+                                            requiredCrew.Steward,
+                                            requiredCrew.Hostess,
+                                            requiredCrew.French,
+                                            requiredCrew.Spanish,
+                                            requiredCrew.German});
+                }
+            }
+
+            logic.required_crew = newRequiredCrew;
+
+        }
     }
 }
