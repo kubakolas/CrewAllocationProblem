@@ -64,7 +64,7 @@ class RequiredCrew
 
     public RequiredCrew(int flight, int staff, int steward, int hostess, int french, int spanish, int german)
     {
-        Flight = flight;
+        Number = flight;
         Staff = staff;
         Steward = steward;
         Hostess = hostess;
@@ -73,7 +73,7 @@ class RequiredCrew
         German = german;
     }
 
-    public int Flight { get; set; }
+    public int Number { get; set; }
     public int Staff { get; set; }
     public int Steward { get; set; }
     public int Hostess { get; set; }
@@ -104,7 +104,7 @@ class RequiredCrew
 
 class Flights
 {
-    public string FlightNumber { get; set; }
+    public string Number { get; set; }
     public string Person1 { get; set; }
     public string Person2 { get; set; }
     public string Person3 { get; set; }
@@ -119,7 +119,7 @@ class Flights
 
     public Flights(string flightNumber, string person1, string person2, string person3, string person4, string person5, string person6, string person7)
     {
-        FlightNumber = flightNumber;
+        Number = flightNumber;
         Person1 = person1;
         Person2 = person2;
         Person3 = person3;
@@ -163,6 +163,7 @@ namespace CrewAllocationProblem
         public MainWindow()
         {
             InitializeComponent();
+            this.SizeToContent = SizeToContent.WidthAndHeight;
             logic.loadStartingData();
             logic.Solve();
         }
@@ -183,15 +184,29 @@ namespace CrewAllocationProblem
             grid.ItemsSource = items;
         }
 
-        private void DataGrid_Loaded3(object sender, RoutedEventArgs e)
+        private async void DataGrid_Loaded3(object sender, RoutedEventArgs e)
         {
-            Flights flights = new Flights();
-            logic.Solve();
+            try
+            {
+                DG3.Visibility = Visibility.Collapsed;
+                Spinner.Visibility = Visibility.Visible;
+                Flights flights = new Flights();
 
-            var items = flights.flightList(logic.flight_crew);
+                await logic.Solve();
 
-            var grid = sender as DataGrid;
-            grid.ItemsSource = items;
+                var items = flights.flightList(logic.flight_crew);
+
+                var grid = sender as DataGrid;
+                grid.ItemsSource = items;
+
+               
+                Spinner.Visibility = Visibility.Collapsed;
+                DG3.Visibility = Visibility.Visible;
+            }
+            catch(Exception ex)
+            {
+                Console.Write(ex.Message);
+            }
 
         }
 
@@ -216,6 +231,7 @@ namespace CrewAllocationProblem
                                             newItem.Spanish == "Yes" ? 1 : 0,
                                             newItem.German == "Yes" ? 1 : 0});
 
+            this.DataGrid_Loaded(DG1, new RoutedEventArgs());
 
         }
 
@@ -232,6 +248,7 @@ namespace CrewAllocationProblem
                                             newItem.Spanish,
                                             newItem.German});
 
+            this.DataGrid_Loaded2(DG2, new RoutedEventArgs());
 
         }
 
@@ -265,7 +282,7 @@ namespace CrewAllocationProblem
 
             logic.names = newNames;
             logic.attributes = newAttributes;
-
+            this.DataGrid_Loaded(DG1, new RoutedEventArgs());
         }
 
         private void UpdateRequiredCrew_Click(object sender, RoutedEventArgs e)
@@ -287,7 +304,7 @@ namespace CrewAllocationProblem
             }
 
             logic.required_crew = newRequiredCrew;
-
+            this.DataGrid_Loaded2(DG2, new RoutedEventArgs());
         }
     }
 }

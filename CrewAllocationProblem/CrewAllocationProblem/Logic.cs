@@ -4,6 +4,9 @@ using System.Linq;
 using Decider.Csp.BaseTypes;
 using Decider.Csp.Integer;
 using CrewAllocationProblem;
+using System.Diagnostics;
+using System.Windows;
+using System.Threading.Tasks;
 
 namespace CrewAllocationProblem
 {
@@ -96,8 +99,11 @@ namespace CrewAllocationProblem
             flight_crew = new string[num_flights, 7];
         }
 
-        public void Solve()
+        public async Task Solve()
         {
+            await Task.Run(() =>
+            { 
+            num_flights = required_crew.Count;
             flight_crew = new string[num_flights, 7];
 
             VariableInteger[,] s = new VariableInteger[num_flights, num_persons];
@@ -187,25 +193,34 @@ namespace CrewAllocationProblem
             }
 
             // Search
-
+            IVariable<int> optiseVar = new VariableInteger("optiser", 1, 100);
             IState<int> state = new StateInteger(variables, csArray);
-            state.StartSearch(out StateOperationResult searchResult);
+            state.StartSearch(out StateOperationResult searchResult, optiseVar, out IDictionary<string, IVariable<int>> solution, 10);
+            if(searchResult == StateOperationResult.Unsatisfiable || searchResult == StateOperationResult.TimedOut)
+            {
+                MessageBox.Show("The result is timed out or unsatisfiable", "Crew Allocation Problem", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
             for (int i = 0; i < num_flights; i++)
             {
-                int count = 0;
-                Console.Write("Flight " + i.ToString() + " :   ");
-                for (int j = 0; j < num_persons; j++)
-                {
-                    
-                    if (s[i, j].Value == 1)
+                    try
                     {
-                        flight_crew[i, count] = names[j];
-                        count++;
+                        int count = 0;
+                        Console.Write("Flight " + i.ToString() + " :   ");
+                        for (int j = 0; j < num_persons; j++)
+                        {
+                            if (s[i, j].Value == 1)
+                            {
+                                flight_crew[i, count] = names[j];
+                                count++;
+                            }
+                        }
                     }
-                }
+                    catch { }
                 Console.WriteLine();
             }
             Console.WriteLine("Runtime:\t{0}\nBacktracks:\t{1}\n", state.Runtime, state.Backtracks);
+        });
+
         }
 
     }
