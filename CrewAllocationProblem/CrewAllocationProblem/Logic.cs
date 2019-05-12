@@ -43,7 +43,7 @@ namespace CrewAllocationProblem
                       "Heather",
                       "Juliet"};
 
-            num_persons = 20;
+            num_persons = names.Count;
 
             attributes = new List<int[]>()
             {
