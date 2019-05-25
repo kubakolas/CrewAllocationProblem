@@ -90,11 +90,82 @@ namespace CrewAllocationProblem
             flightsToNames = new string[flightsCount, 7];
         }
 
+        public void loadStartingData2()
+        {
+            names = new List<string>
+                      { "Oliver",
+                      "Jack",
+                      "Harry",
+                      "Jacob",
+                      "Charlie",
+                      "Thomas",
+                      "Oscar",
+                      "Bob",
+                      "James",
+                      "William",
+                      "Jake",
+                      "Margaret",
+                      "Tracy",
+                      "Marilyn",
+                      "Carolyn",
+                      "Michelle",
+                      "Megan",
+                      "Poppy",
+                      "Elizabeth",
+                      "Margaret"};
+
+            crewCount = names.Count;
+
+            // bool values which describes each person
+            // steward, hostess, french, spanish, german
+            personsAttributes = new List<int[]>()
+            {
+              new int[]{1,0,1,0,1},
+              new int[]{1,0,0,0,0},
+              new int[]{1,0,0,0,1},
+              new int[]{1,0,1,0,1},
+              new int[]{1,0,0,0,0},
+              new int[]{1,0,1,1,1},
+              new int[]{1,0,0,1,0},
+              new int[]{1,0,1,0,0},
+              new int[]{1,0,0,1,1},
+              new int[]{1,0,1,0,0},
+              new int[]{1,1,0,1,0},
+              new int[]{0,1,0,0,1},
+              new int[]{0,1,1,0,0},
+              new int[]{0,1,0,1,0},
+              new int[]{0,1,1,0,1},
+              new int[]{0,1,1,1,1},
+              new int[]{0,1,0,1,0},
+              new int[]{0,1,1,0,1},
+              new int[]{0,1,1,0,0},
+              new int[]{0,1,1,1,1}
+            };
+
+            // each column is a required number for each flight
+            // columns: staff, stewards, hostesses, french, spanish, german
+            crewRequirements = new List<int[]>() {
+                new int[]{4,2,2,1,1,1}, // flight 1
+                new int[]{4,2,2,1,2,1}, // flight 2
+                new int[]{7,2,2,1,1,1},
+                new int[]{6,1,1,1,2,1},
+                new int[]{4,3,1,1,1,1},
+                new int[]{4,1,3,1,1,1},
+                new int[]{4,2,2,1,2,1},
+                new int[]{7,1,2,2,1,1},
+                new int[]{3,2,1,2,1,1},
+                new int[]{3,2,1,1,2,1},
+            };
+
+            flightsCount = crewRequirements.Count;
+            flightsToNames = new string[flightsCount, 7];
+        }
+
         public async Task Solve()
         {
             await Task.Run(() =>
             {
-
+                crewCount = names.Count;
                 flightsCount = crewRequirements.Count;
                 flightsToNames = new string[flightsCount, 7];
 

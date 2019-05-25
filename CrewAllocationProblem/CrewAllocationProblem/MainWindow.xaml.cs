@@ -164,7 +164,7 @@ namespace CrewAllocationProblem
         {
             InitializeComponent();
             this.SizeToContent = SizeToContent.WidthAndHeight;
-            logic.loadStartingData();
+            logic.loadStartingData2();
             logic.Solve();
         }
 
