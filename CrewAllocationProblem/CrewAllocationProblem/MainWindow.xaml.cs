@@ -171,7 +171,7 @@ namespace CrewAllocationProblem
         private void DataGrid_Loaded(object sender, RoutedEventArgs e)
         {
             Crew crew = new Crew();
-            var items = crew.crewList(logic.names, logic.attributes);
+            var items = crew.crewList(logic.names, logic.personsAttributes);
             var grid = sender as DataGrid;
             grid.ItemsSource = items;
         }
@@ -179,7 +179,7 @@ namespace CrewAllocationProblem
         private void DataGrid_Loaded2(object sender, RoutedEventArgs e)
         {
             RequiredCrew requiredCrew = new RequiredCrew();
-            var items = requiredCrew.requiredCrewList(logic.required_crew);
+            var items = requiredCrew.requiredCrewList(logic.crewRequirements);
             var grid = sender as DataGrid;
             grid.ItemsSource = items;
         }
@@ -194,7 +194,7 @@ namespace CrewAllocationProblem
 
                 await logic.Solve();
 
-                var items = flights.flightList(logic.flight_crew);
+                var items = flights.flightList(logic.flightsToNames);
 
                 var grid = sender as DataGrid;
                 grid.ItemsSource = items;
@@ -215,7 +215,7 @@ namespace CrewAllocationProblem
             var number = textBox.Text;
 
             logic.names.RemoveAt(Convert.ToInt32(number) - 1);
-            logic.attributes.RemoveAt(Convert.ToInt32(number) - 1);
+            logic.personsAttributes.RemoveAt(Convert.ToInt32(number) - 1);
             this.DataGrid_Loaded(DG1, new RoutedEventArgs());
         }
 
@@ -225,7 +225,7 @@ namespace CrewAllocationProblem
             int length = listNewItem.Count;
             var newItem = listNewItem[length - 2] as Crew;
             logic.names.Add(newItem.Name);
-            logic.attributes.Add(new int[] {newItem.Steward == "Yes" ? 1 : 0,
+            logic.personsAttributes.Add(new int[] {newItem.Steward == "Yes" ? 1 : 0,
                                             newItem.Hostess == "Yes" ? 1 : 0,
                                             newItem.French == "Yes" ? 1 : 0,
                                             newItem.Spanish == "Yes" ? 1 : 0,
@@ -241,7 +241,7 @@ namespace CrewAllocationProblem
             var listNewItem = this.DG2.Items;
             int length = listNewItem.Count;
             var newItem = listNewItem[length - 2] as RequiredCrew;
-            logic.required_crew.Add(new int[] {newItem.Staff,
+            logic.crewRequirements.Add(new int[] {newItem.Staff,
                                             newItem.Steward,
                                             newItem.Hostess,
                                             newItem.French,
@@ -255,8 +255,8 @@ namespace CrewAllocationProblem
         private void DelRequiredCrew_Click(object sender, RoutedEventArgs e)
         {
             var number = textBox2.Text;
-            logic.required_crew.RemoveAt(Convert.ToInt32(number) - 1);
-            logic.num_flights = logic.required_crew.Count;
+            logic.crewRequirements.RemoveAt(Convert.ToInt32(number) - 1);
+            logic.flightsCount = logic.crewRequirements.Count;
             this.DataGrid_Loaded2(DG2, new RoutedEventArgs());
         }
 
@@ -281,7 +281,7 @@ namespace CrewAllocationProblem
             }
 
             logic.names = newNames;
-            logic.attributes = newAttributes;
+            logic.personsAttributes = newAttributes;
             this.DataGrid_Loaded(DG1, new RoutedEventArgs());
         }
 
@@ -303,7 +303,7 @@ namespace CrewAllocationProblem
                 }
             }
 
-            logic.required_crew = newRequiredCrew;
+            logic.crewRequirements = newRequiredCrew;
             this.DataGrid_Loaded2(DG2, new RoutedEventArgs());
         }
     }
