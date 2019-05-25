@@ -185,7 +185,7 @@ namespace CrewAllocationProblem
                 // create constraints for each flight
                 for (int f = 0; f < flightsCount; f++)
                 {
-                    // size of crew for each flight must be equal to input size
+                    // size of crew for each flight must be equal to input value
                     var crewForFlight = new ExpressionInteger[crewCount];
                     for (int p = 0; p < crewCount; p++)
                     {
@@ -196,7 +196,7 @@ namespace CrewAllocationProblem
                     constraints.Add(new ConstraintInteger(crewSizesEqual));
 
                     // person attributes (is steward, is hostess, speaks french, speaks spanish, speaks german)
-                    // sum of persons for each attribute must be greater than or equal to input attribute
+                    // sum of persons with each attribute must be greater than or equal to input value
                     for (int a = 0; a < 5; a++)
                     {
                         crewForFlight = new ExpressionInteger[crewCount];
