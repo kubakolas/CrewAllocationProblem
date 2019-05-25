@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Decider.Csp.BaseTypes;
 using Decider.Csp.Integer;
-using CrewAllocationProblem;
-using System.Diagnostics;
 using System.Windows;
 using System.Threading.Tasks;
 

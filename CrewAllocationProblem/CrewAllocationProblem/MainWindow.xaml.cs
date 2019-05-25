@@ -1,18 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 
 class Crew
@@ -213,10 +202,16 @@ namespace CrewAllocationProblem
         private void DelCrew_Click(object sender, RoutedEventArgs e)
         {
             var number = textBox.Text;
-
-            logic.names.RemoveAt(Convert.ToInt32(number) - 1);
-            logic.personsAttributes.RemoveAt(Convert.ToInt32(number) - 1);
-            this.DataGrid_Loaded(DG1, new RoutedEventArgs());
+            int numberInt = 0;
+            if (Int32.TryParse(number, out numberInt))
+            {
+                if (numberInt > 0 && numberInt <= logic.personsAttributes.Count)
+                {
+                    logic.names.RemoveAt(Convert.ToInt32(number) - 1);
+                    logic.personsAttributes.RemoveAt(Convert.ToInt32(number) - 1);
+                    this.DataGrid_Loaded(DG1, new RoutedEventArgs());
+                }
+            }
         }
 
         private void AddCrew_Click(object sender, RoutedEventArgs e)
@@ -255,9 +250,16 @@ namespace CrewAllocationProblem
         private void DelRequiredCrew_Click(object sender, RoutedEventArgs e)
         {
             var number = textBox2.Text;
-            logic.crewRequirements.RemoveAt(Convert.ToInt32(number) - 1);
-            logic.flightsCount = logic.crewRequirements.Count;
-            this.DataGrid_Loaded2(DG2, new RoutedEventArgs());
+            int numberInt = 0;
+            if (Int32.TryParse(number, out numberInt))
+            {
+                if (numberInt > 0 && numberInt <= logic.crewRequirements.Count)
+                {
+                    logic.crewRequirements.RemoveAt(Convert.ToInt32(number) - 1);
+                    logic.flightsCount = logic.crewRequirements.Count;
+                    this.DataGrid_Loaded2(DG2, new RoutedEventArgs());
+                }
+            }
         }
 
         private void UpdateCrew_Click(object sender, RoutedEventArgs e)
