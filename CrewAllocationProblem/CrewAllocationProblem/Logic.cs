@@ -231,15 +231,19 @@ namespace CrewAllocationProblem
                 flightsToNames = new string[flightsCount, 7];
                 for (int i = 0; i < flightsCount; i++)
                 {
-                    int count = 0;
-                    for (int j = 0; j < crewCount; j++)
+                    try
                     {
-                        if (flightsToPersons[i, j].Value == 1)
+                        int count = 0;
+                        for (int j = 0; j < crewCount; j++)
                         {
-                            flightsToNames[i, count] = names[j];
-                            count++;
+                            if (flightsToPersons[i, j].Value == 1)
+                            {
+                                flightsToNames[i, count] = names[j];
+                                count++;
+                            }
                         }
                     }
+                    catch { }
                 }
             });
         }
