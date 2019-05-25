@@ -116,7 +116,7 @@ namespace CrewAllocationProblem
 
             crewCount = names.Count;
 
-            // bool values which describes each person
+            // boolean values which describes each person
             // steward, hostess, french, spanish, german
             personsAttributes = new List<int[]>()
             {
@@ -167,7 +167,6 @@ namespace CrewAllocationProblem
             {
                 crewCount = names.Count;
                 flightsCount = crewRequirements.Count;
-                flightsToNames = new string[flightsCount, 7];
 
                 VariableInteger[,] flightsToPersons = new VariableInteger[flightsCount, crewCount];
                 for (int i = 0; i < flightsCount; i++)
@@ -177,114 +176,75 @@ namespace CrewAllocationProblem
                         flightsToPersons[i, j] = new VariableInteger("crew" + i.ToString() + j.ToString(), 0, 1);
                     }
                 }
-
                 var variables = flightsToPersons.Cast<VariableInteger>().ToList();
-                var working_persons_num = new VariableInteger("working_persons", 1, crewCount);
+
 
                 // Constraints
+                var constraints = new List<ConstraintInteger>();
 
-                var csArray = new List<ConstraintInteger>();
-
-                // number of working persons
-
-                ExpressionInteger[] nw = new ExpressionInteger[crewCount];
-                for (int p = 0; p < crewCount; p++)
-                {
-                    VariableInteger[] tmp = new VariableInteger[flightsCount];
-                    for (int f = 0; f < flightsCount; f++)
-                    {
-                        tmp[f] = flightsToPersons[f, p];
-                    }
-                    var sum = new ExpressionInteger(0);
-                    foreach (var v in tmp)
-                    {
-                        sum += v;
-                    }
-                    nw[p] = sum;
-                }
-                var global_sum = new ExpressionInteger(0);
-                foreach (var v in nw)
-                {
-                    global_sum += v;
-                }
-                var working_number_cs = new ConstraintInteger(global_sum == working_persons_num);
-                csArray.Add(working_number_cs);
-
-
+                // create constraints for each flight
                 for (int f = 0; f < flightsCount; f++)
                 {
-                    // size of crew
-                    ExpressionInteger[] tmp = new ExpressionInteger[crewCount];
+                    // size of crew for each flight must be equal to input size
+                    var crewForFlight = new ExpressionInteger[crewCount];
                     for (int p = 0; p < crewCount; p++)
                     {
-                        tmp[p] = flightsToPersons[f, p];
+                        crewForFlight[p] = flightsToPersons[f, p];
                     }
-                    var sum = new ExpressionInteger(0);
-                    foreach (var v in tmp)
-                    {
-                        sum += v;
-                    }
-                    var sizesEqual = (sum == crewRequirements[f][0]);
-                    csArray.Add(new ConstraintInteger(sizesEqual));
+                    var flightCrewCount = crewForFlight.Aggregate((a, b) => a + b);
+                    var crewSizesEqual = (flightCrewCount == crewRequirements[f][0]);
+                    constraints.Add(new ConstraintInteger(crewSizesEqual));
 
-                    // personsAttributes and requirements
+                    // person attributes (is steward, is hostess, speaks french, speaks spanish, speaks german)
+                    // sum of persons for each attribute must be greater than or equal to input attribute
                     for (int a = 0; a < 5; a++)
                     {
-                        ExpressionInteger[] tmp2 = new ExpressionInteger[crewCount];
+                        crewForFlight = new ExpressionInteger[crewCount];
                         for (int p = 0; p < crewCount; p++)
                         {
-                            tmp2[p] = (flightsToPersons[f, p] * personsAttributes[p][a]);
+                            crewForFlight[p] = (flightsToPersons[f, p] * personsAttributes[p][a]);
                         }
-                        var sum2 = new ExpressionInteger(0);
-                        foreach (var v in tmp2)
-                        {
-                            sum2 += v;
-                        }
-                        var attEqual = sum2 >= crewRequirements[f][a + 1];
-                        csArray.Add(new ConstraintInteger(attEqual));
+                        var sum = crewForFlight.Aggregate((x, y) => x + y);
+                        var attributesGreaterOrEqual = sum >= crewRequirements[f][a + 1];
+                        constraints.Add(new ConstraintInteger(attributesGreaterOrEqual));
                     }
                 }
 
-                // after a flight, break for at least two flights
+                // crew member needs to have 2 flights break after his flight
                 for (int f = 0; f < flightsCount - 2; f++)
                 {
                     for (int i = 0; i < crewCount; i++)
                     {
                         var cs = ((flightsToPersons[f, i] + flightsToPersons[f + 1, i] + flightsToPersons[f + 2, i]) <= 1);
-                        csArray.Add(new ConstraintInteger(cs));
+                        constraints.Add(new ConstraintInteger(cs));
                     }
                 }
 
-                // Search
-                IVariable<int> optimiser = new VariableInteger("optiser", 1, 100);
-                IState<int> state = new StateInteger(variables, csArray);
+                // search for solution
+
+                IVariable<int> optimiser = new VariableInteger("optimiser", 1, 100);
+                IState<int> state = new StateInteger(variables, constraints);
                 state.StartSearch(out StateOperationResult searchResult, optimiser, out IDictionary<string, IVariable<int>> solution, 10);
                 if (searchResult == StateOperationResult.Unsatisfiable || searchResult == StateOperationResult.TimedOut)
                 {
-                    MessageBox.Show("The result is timed out or unsatisfiable", "Crew Allocation Problem", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("The result is timed out or unsatisfiable", "Crew Allocation Problem",
+                                    MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+
+                flightsToNames = new string[flightsCount, 7];
                 for (int i = 0; i < flightsCount; i++)
                 {
-                    try
+                    int count = 0;
+                    for (int j = 0; j < crewCount; j++)
                     {
-                        int count = 0;
-                        Console.Write("Flight " + i.ToString() + " :   ");
-                        for (int j = 0; j < crewCount; j++)
+                        if (flightsToPersons[i, j].Value == 1)
                         {
-                            if (flightsToPersons[i, j].Value == 1)
-                            {
-                                flightsToNames[i, count] = names[j];
-                                count++;
-                            }
+                            flightsToNames[i, count] = names[j];
+                            count++;
                         }
                     }
-                    catch { }
-                    Console.WriteLine();
                 }
-                Console.WriteLine("Runtime:\t{0}\nBacktracks:\t{1}\n", state.Runtime, state.Backtracks);
             });
-
         }
-
     }
 }
