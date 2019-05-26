@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace CrewAllocationProblem
 {
-    class Logic
+    class Solver
     {
-        public List<string> names;
         public int crewCount;
-        public List<int[]> personsAttributes;
-        public List<int[]> crewRequirements;
-        public string[,] flightsToNames;
         public int flightsCount;
+        public string[,] flightsToNames;
+        public List<string> names;            
+        public List<int[]> personsAttributes;
+        public List<int[]> crewRequirements;           
 
-        public void loadStartingData()
+        public void LoadStartingData()
         {
             names = new List<string>
                       { "Tom",
@@ -87,7 +87,7 @@ namespace CrewAllocationProblem
             flightsToNames = new string[flightsCount, 7];
         }
 
-        public void loadStartingData2()
+        public void LoadStartingData2()
         {
             names = new List<string>
                       { "Oliver",

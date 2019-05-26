@@ -147,20 +147,20 @@ namespace CrewAllocationProblem
     /// </summary>
     public partial class MainWindow : Window
     {
-        Logic logic = new Logic();
+        Solver solver = new Solver();
 
         public MainWindow()
         {
             InitializeComponent();
             this.SizeToContent = SizeToContent.WidthAndHeight;
-            logic.loadStartingData2();
-            logic.Solve();
+            solver.LoadStartingData2();
+            solver.Solve();
         }
 
         private void DataGrid_Loaded(object sender, RoutedEventArgs e)
         {
             Crew crew = new Crew();
-            var items = crew.crewList(logic.names, logic.personsAttributes);
+            var items = crew.crewList(solver.names, solver.personsAttributes);
             var grid = sender as DataGrid;
             grid.ItemsSource = items;
         }
@@ -168,7 +168,7 @@ namespace CrewAllocationProblem
         private void DataGrid_Loaded2(object sender, RoutedEventArgs e)
         {
             RequiredCrew requiredCrew = new RequiredCrew();
-            var items = requiredCrew.requiredCrewList(logic.crewRequirements);
+            var items = requiredCrew.requiredCrewList(solver.crewRequirements);
             var grid = sender as DataGrid;
             grid.ItemsSource = items;
         }
@@ -181,9 +181,9 @@ namespace CrewAllocationProblem
                 Spinner.Visibility = Visibility.Visible;
                 Flights flights = new Flights();
 
-                await logic.Solve();
+                await solver.Solve();
 
-                var items = flights.flightList(logic.flightsToNames);
+                var items = flights.flightList(solver.flightsToNames);
 
                 var grid = sender as DataGrid;
                 grid.ItemsSource = items;
@@ -205,10 +205,10 @@ namespace CrewAllocationProblem
             int numberInt = 0;
             if (Int32.TryParse(number, out numberInt))
             {
-                if (numberInt > 0 && numberInt <= logic.personsAttributes.Count)
+                if (numberInt > 0 && numberInt <= solver.personsAttributes.Count)
                 {
-                    logic.names.RemoveAt(Convert.ToInt32(number) - 1);
-                    logic.personsAttributes.RemoveAt(Convert.ToInt32(number) - 1);
+                    solver.names.RemoveAt(Convert.ToInt32(number) - 1);
+                    solver.personsAttributes.RemoveAt(Convert.ToInt32(number) - 1);
                     this.DataGrid_Loaded(DG1, new RoutedEventArgs());
                 }
             }
@@ -219,8 +219,8 @@ namespace CrewAllocationProblem
             var listNewItem = this.DG1.Items;
             int length = listNewItem.Count;
             var newItem = listNewItem[length - 2] as Crew;
-            logic.names.Add(newItem.Name);
-            logic.personsAttributes.Add(new int[] {newItem.Steward == "Yes" ? 1 : 0,
+            solver.names.Add(newItem.Name);
+            solver.personsAttributes.Add(new int[] {newItem.Steward == "Yes" ? 1 : 0,
                                             newItem.Hostess == "Yes" ? 1 : 0,
                                             newItem.French == "Yes" ? 1 : 0,
                                             newItem.Spanish == "Yes" ? 1 : 0,
@@ -236,7 +236,7 @@ namespace CrewAllocationProblem
             var listNewItem = this.DG2.Items;
             int length = listNewItem.Count;
             var newItem = listNewItem[length - 2] as RequiredCrew;
-            logic.crewRequirements.Add(new int[] {newItem.Staff,
+            solver.crewRequirements.Add(new int[] {newItem.Staff,
                                             newItem.Steward,
                                             newItem.Hostess,
                                             newItem.French,
@@ -253,10 +253,10 @@ namespace CrewAllocationProblem
             int numberInt = 0;
             if (Int32.TryParse(number, out numberInt))
             {
-                if (numberInt > 0 && numberInt <= logic.crewRequirements.Count)
+                if (numberInt > 0 && numberInt <= solver.crewRequirements.Count)
                 {
-                    logic.crewRequirements.RemoveAt(Convert.ToInt32(number) - 1);
-                    logic.flightsCount = logic.crewRequirements.Count;
+                    solver.crewRequirements.RemoveAt(Convert.ToInt32(number) - 1);
+                    solver.flightsCount = solver.crewRequirements.Count;
                     this.DataGrid_Loaded2(DG2, new RoutedEventArgs());
                 }
             }
@@ -282,8 +282,8 @@ namespace CrewAllocationProblem
                 }
             }
 
-            logic.names = newNames;
-            logic.personsAttributes = newAttributes;
+            solver.names = newNames;
+            solver.personsAttributes = newAttributes;
             this.DataGrid_Loaded(DG1, new RoutedEventArgs());
         }
 
@@ -305,7 +305,7 @@ namespace CrewAllocationProblem
                 }
             }
 
-            logic.crewRequirements = newRequiredCrew;
+            solver.crewRequirements = newRequiredCrew;
             this.DataGrid_Loaded2(DG2, new RoutedEventArgs());
         }
     }
