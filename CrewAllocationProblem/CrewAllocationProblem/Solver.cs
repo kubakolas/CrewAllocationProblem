@@ -10,7 +10,7 @@ namespace CrewAllocationProblem
 
     class Solver
     {
-        readonly int MAX_PERSONS_IN_CREW = 7;
+        readonly int maxCrewSize = 7;
         // input
         public int crewCount;
         public int flightsCount;
@@ -89,7 +89,7 @@ namespace CrewAllocationProblem
             };
 
             flightsCount = crewRequirements.Count;
-            flightsToNames = new string[flightsCount, MAX_PERSONS_IN_CREW];
+            flightsToNames = new string[flightsCount, maxCrewSize];
         }
 
         public void LoadStartingData2()
@@ -160,7 +160,7 @@ namespace CrewAllocationProblem
             };
 
             flightsCount = crewRequirements.Count;
-            flightsToNames = new string[flightsCount, MAX_PERSONS_IN_CREW];
+            flightsToNames = new string[flightsCount, maxCrewSize];
         }
 
         public async Task Solve()
@@ -233,7 +233,7 @@ namespace CrewAllocationProblem
                                     MessageBoxButton.OK, MessageBoxImage.Error);
                 }
 
-                flightsToNames = new string[flightsCount, MAX_PERSONS_IN_CREW];
+                flightsToNames = new string[flightsCount, maxCrewSize];
                 for (int i = 0; i < flightsCount; i++)
                 {
                     try
