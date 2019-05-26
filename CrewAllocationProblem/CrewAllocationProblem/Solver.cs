@@ -9,12 +9,15 @@ namespace CrewAllocationProblem
 {
     class Solver
     {
+        // input
         public int crewCount;
         public int flightsCount;
-        public string[,] flightsToNames;
         public List<string> names;            
         public List<int[]> personsAttributes;
-        public List<int[]> crewRequirements;           
+        public List<int[]> crewRequirements;
+
+        // output
+        public string[,] flightsToNames;
 
         public void LoadStartingData()
         {
