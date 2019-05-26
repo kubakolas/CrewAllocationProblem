@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace CrewAllocationProblem
 {
+
     class Solver
     {
+        readonly int MAX_PERSONS_IN_CREW = 7;
         // input
         public int crewCount;
         public int flightsCount;
@@ -87,7 +89,7 @@ namespace CrewAllocationProblem
             };
 
             flightsCount = crewRequirements.Count;
-            flightsToNames = new string[flightsCount, 7];
+            flightsToNames = new string[flightsCount, MAX_PERSONS_IN_CREW];
         }
 
         public void LoadStartingData2()
@@ -104,7 +106,7 @@ namespace CrewAllocationProblem
                       "James",
                       "William",
                       "Jake",
-                      "Margaret",
+                      "Titi",
                       "Tracy",
                       "Marilyn",
                       "Carolyn",
@@ -158,7 +160,7 @@ namespace CrewAllocationProblem
             };
 
             flightsCount = crewRequirements.Count;
-            flightsToNames = new string[flightsCount, 7];
+            flightsToNames = new string[flightsCount, MAX_PERSONS_IN_CREW];
         }
 
         public async Task Solve()
@@ -231,7 +233,7 @@ namespace CrewAllocationProblem
                                     MessageBoxButton.OK, MessageBoxImage.Error);
                 }
 
-                flightsToNames = new string[flightsCount, 7];
+                flightsToNames = new string[flightsCount, MAX_PERSONS_IN_CREW];
                 for (int i = 0; i < flightsCount; i++)
                 {
                     try
